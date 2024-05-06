@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlanList from "./PlanList";
 import { v4 as uniqId } from "uuid";
+import {toast} from "react-toastify"
+
 
 export default function InputSection() {
   const [data, setData] = useState([]);
@@ -18,6 +20,7 @@ export default function InputSection() {
 
   const addData = () => {
     if (str === "" || num === "") {
+    toast.warn("All Field Are Required!");
       return;
     }
 
@@ -30,29 +33,44 @@ export default function InputSection() {
     setData(data.filter((i) => i.id !== id));
   };
 
+  //   to persist data into
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("data"));
+    if (storedData) {
+      setData(storedData);
+      console.log(storedData);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("data", JSON.stringify(data));
+  }, [data]);
+
   return (
     <>
       <div className="flex gap-4 p-4 bg-gray-100 rounded-lg flex-col items-center justify-center text-black md:flex-row max-w-[80%] mx-auto my-10">
-        <span className="flex flex-col flex-1"><label className="bg-white/80  max-w-fit p-2 px-4 " htmlFor="text-Input">Enter Your Plan:</label>
-        <input
-          type="text"
-          id="text-Input"
-          value={str}
-          placeholder="Enter text"
-          className="flex-1 border border-gray-300 text-white p-2 rounded focus:outline-none focus:border-blue-500"
-          aria-label="Text input"
-          onChange={onChangeHandle}
-        /></span>
-       <span className="flex flex-col flex-1"> <label htmlFor="number-Input" className="bg-white/80 p-2 px-4 max-w-fit ">Enter Study Hour: </label>
-        <input
-          id="number-Input"
-          type="number"
-          value={num}
-          onChange={onChangeNumHandle}
-          placeholder="Enter number"
-          className=" border border-gray-300 p-2 text-white rounded focus:outline-none focus:border-blue-500"
-          aria-label="Number input"
-        /></span>
+        <span className="flex flex-col flex-1">
+          <input
+            type="text"
+            id="text-Input"
+            value={str}
+            placeholder="Enter Your Plan:"
+            className="flex-1 border border-gray-300 text-white p-2 rounded focus:outline-none focus:border-blue-500"
+            aria-label="Text input"
+            onChange={onChangeHandle}
+          />
+        </span>
+        <span className="flex flex-col flex-1">
+          <input
+            id="number-Input"
+            type="number"
+            value={num}
+            onChange={onChangeNumHandle}
+            placeholder="Enter Study Hours:"
+            className=" border border-gray-300 p-2 text-white rounded focus:outline-none focus:border-blue-500"
+            aria-label="Number input"
+          />
+        </span>
         <span className="md:self-end">
           <button
             className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
@@ -64,8 +82,9 @@ export default function InputSection() {
         </span>
       </div>
 
-      <div className="flex flex-col  w-full rounded-t bg-neutral-700 max-w-[80%] mx-auto text-center items-center  justify-center">
-        <h1 className="text-xl py-5 font-serif font-semibold ">Your Task </h1>
+      <div className="flex flex-col border  w-full rounded-t-lg bg-neutral-700 max-w-[80%] mx-auto text-center items-center  justify-center">
+        <h1 className="text-xl py-5 font-serif font-semibold underline text-yellow-400 ">Your Task </h1>
+        
 
         <div className=" w-[95%] flex flex-col gap-5 py-10 px-5">
           {data.map((item) => (
@@ -77,6 +96,7 @@ export default function InputSection() {
             />
           ))}
         </div>
+
       </div>
     </>
   );
