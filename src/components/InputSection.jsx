@@ -82,7 +82,7 @@ export default function InputSection() {
         </span>
       </div>
 
-      <div className="flex flex-col border  w-full rounded-t-lg bg-neutral-700 max-w-[80%] mx-auto text-center items-center  justify-center">
+      <div className="flex flex-col border border-neutral-500  w-full rounded-lg bg-neutral-700 max-w-[80%] mx-auto text-center items-center  justify-center">
         <h1 className="text-xl py-5 font-serif font-semibold underline text-yellow-400 ">Your Task </h1>
         
 
